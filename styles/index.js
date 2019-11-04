@@ -1,7 +1,7 @@
 import { StyleSheet, Dimensions } from 'react-native';
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
-// import { getStatusBarHeight } from 'react-native-status-bar-height';
-// const heightSB = getStatusBarHeight();
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+const heightSB = getStatusBarHeight();
 
 const styles = StyleSheet.create({
     // Авторизация
@@ -42,30 +42,6 @@ const styles = StyleSheet.create({
         height: 160,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    button: {
-        marginTop: 5,
-        width: WIDTH - 40,
-        height: 40,
-        backgroundColor: '#0080FF',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 5
-    },
-    buttonOff: {
-        marginTop: 5,
-        width: WIDTH - 40,
-        height: 40,
-        backgroundColor: '#BDBDBD',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 5
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: 'bold',
-        textAlign: 'center',
     },
     loginRegTextReg: {
         color: '#0080FF',
@@ -176,7 +152,7 @@ const styles = StyleSheet.create({
         color: 'black',
         fontWeight: 'bold'
     },
-    newsScroll: {
+    newsScreen: {
         flexDirection: 'column',
         alignItems: 'center',
         flex: 1,
@@ -212,47 +188,10 @@ const styles = StyleSheet.create({
         color: 'grey'
     },
 
-    // App Drawer
-    drawerView: {
+    // App drawer 
+    drawer: {
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    drawerLogo: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 30,
-        marginTop: 10,
-    },
-    drawerLogoText: {
-        color: '#0080FF',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-    drawerIcon: {
-        marginBottom: 10,
-    },
-    drawerButton: {
-        width: WIDTH / 2,
-        height: 50,
-        backgroundColor: '#0080FF',
-        borderRadius: 5,
-        marginBottom: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    drawerExit: {
-        width: WIDTH / 2,
-        height: 50,
-        backgroundColor: '#BDBDBD',
-        borderRadius: 5,
-        marginBottom: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    drawerButtonText: {
-        fontSize: 16,
-        color: 'white',
-        fontWeight: 'bold',
     },
     //Профиль пользователя
     profileView: {
@@ -310,14 +249,6 @@ const styles = StyleSheet.create({
         marginTop: 30,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    profileButton: {
-        width: WIDTH / 2.3,
-        height: 40,
-        backgroundColor: '#0080FF',
-        borderRadius: 5,
-        justifyContent: 'center',
         alignItems: 'center',
     },
 
@@ -405,10 +336,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: 'center',
     },
-    trackButtonText: {
-        color: 'white',
-        fontSize: 24,
-    },
     trackButtonLog: {
         width: WIDTH - 80,
         height: 30,
@@ -477,23 +404,135 @@ const styles = StyleSheet.create({
         textAlign:'center',
     },
     //Транзакции
+    transactionScreen: {
+        width: WIDTH,
+        height: HEIGHT-80,
+        justifyContent:'flex-start',
+        alignItems:'center',
+    },
     transaction: {
         width: WIDTH,
-        height: 40,
+        height: 50,
         justifyContent:'center',
         alignItems:'center',
         borderBottomWidth: 1,
         borderBottomColor: '#BDBDBD',
     },
-    transactionText: {
-        fontSize: 16,
+    transactionPlus: {
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
+    transactionTxtPlus: {
+        fontSize: 24,
         textAlign: 'center',
         color: 'green'
     },
-    transactionTextW: {
-        fontSize: 16,
+    transactionTxtPlusDate: {
+        fontSize: 18,
+        color: 'green',
+        textAlign: 'center',
+    },
+    transactionTxtMinus: {
+        fontSize: 14,
         textAlign: 'center',
         color: 'red'
+    },
+    //Кнопки
+    StandardBtn: {
+        marginTop: 5,
+        width: WIDTH - 40,
+        height: 40,
+        backgroundColor: '#0080FF',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5
+    },
+    standardBtnGray: {
+        marginTop: 5,
+        width: WIDTH - 40,
+        height: 40,
+        backgroundColor: '#BDBDBD',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5
+    },
+    halfBtn: {
+        width: WIDTH / 2.3,
+        height: 40,
+        backgroundColor: '#0080FF',
+        borderRadius: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    bigBtnBlue: {
+        width: WIDTH - 40,
+        height: 120,
+        borderRadius: 10,
+        backgroundColor: '#0080FF',
+        justifyContent: "center",
+        alignItems: 'center',
+    },
+    bigBtnRed: {
+        width: WIDTH - 40,
+        height: 120,
+        borderRadius: 10,
+        backgroundColor: "#E41D32",
+        justifyContent: "center",
+        alignItems: 'center',
+    },
+    drawerBtnGray: {
+        width: WIDTH / 2,
+        height: 50,
+        backgroundColor: '#BDBDBD',
+        borderRadius: 5,
+        marginBottom: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    drawerBtn: {
+        width: WIDTH / 2,
+        height: 50,
+        backgroundColor: '#0080FF',
+        borderRadius: 5,
+        marginBottom: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    //Текст кнопок
+    drawerBtnText: {
+        fontSize: 16,
+        color: 'white',
+        fontWeight: 'bold',
+    },
+    trackBtnText: {
+        color: 'white',
+        fontSize: 24,
+    },
+    btnText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    // ЛОГО
+    logo: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 10,
+        marginTop: heightSB + 5,
+    },
+    logoText: {
+        color: '#0080FF',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    logoIcon: {
+        marginBottom: 5,
+    },
+    //Отступ
+    indent: {
+        width: WIDTH,
+        height: 20,
     },
 });
 

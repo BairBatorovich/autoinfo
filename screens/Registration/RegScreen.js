@@ -5,7 +5,7 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import axios from 'axios';
 
 import styles from '../../styles';
-
+import StandardBtn from '../../components/button/StandardBtn';
 
 
 class RegScreen extends React.Component {
@@ -165,9 +165,7 @@ class RegScreen extends React.Component {
                         />
 
                     </View>
-                    <TouchableOpacity style={styles.button} onPress={this.reg}>
-                        <Text style={styles.buttonText}>Регистрация</Text>
-                    </TouchableOpacity>
+                    <StandardBtn name='Регистрация' run={this.reg}/>
 
                 </View>
 

@@ -4,7 +4,7 @@ import { Text, View, TouchableOpacity, AsyncStorage, FlatList, ScrollView, Refre
 import { DrawerActions } from 'react-navigation-drawer';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import axios from 'axios';
-import { SQLite } from 'expo-sqlite';
+import * as SQLite from 'expo-sqlite';
 
 import styles from '../../styles';
 import News from '../../components/news'
@@ -21,6 +21,7 @@ class NewsScreen extends React.Component {
             news: [],
             page: 1,
             refreshing: false,
+            refresh: false,
         }
     }
     static navigationOptions = ({ navigation }) => {
@@ -48,10 +49,10 @@ class NewsScreen extends React.Component {
         } catch (error) {
             console.log(error);
         }
+        this.setState({ refresh: false });
     }
     //загрузка старых новостей при нижнем положении скрола 
     pushnews = async () => {
-        console.log('swipe');
         let tok = await this._retrieveData();
         await this.setState({ page: ++this.state.page });
         try {
@@ -83,7 +84,7 @@ class NewsScreen extends React.Component {
 
     //обновление новостей свайпом вниз
     update = () => {
-        this.setState({ refreshing: true, page: 1 });
+        this.setState({ refresh: true, page: 1 });
         this.downloadnews();
     }
 
@@ -106,34 +107,34 @@ class NewsScreen extends React.Component {
                         latitude float, longitude float, radius float, name text, soundLink text );`);
                 tx.executeSql(
                     `create table if not exists loaded (id integer primary key not null, load int);`); //Здесь хранится статус загрузки озвучки маршрута
+                tx.executeSql(
+                    `create table if not exists qrcode (id integer primary key autoincrement not null, url text);`);
             },
             error => { console.log(error) }
         );
     }
     render() {
-        const { news } = this.state;
+        const { news,refresh } = this.state;
 
         return (
-            <ScrollView
-                refreshControl={
-                    <RefreshControl
-                        refreshing={this.state.refreshing}
-                        onRefresh={this.update}
-                        progressBackgroundColor='#58ACFA'
-                    />
-                }
-                onMomentumScrollEnd={this.pushnews}
-            >
-                <View style={styles.newsScroll}>
-                    {news.map(news => <News
-                        key={news.id}
-                        id={news.id}
-                        title={news.title}
-                        date={news.dateView}
+
+            <View style={ styles.newsScreen}>
+                <FlatList
+                    data={news}
+                    renderItem={({ item }) => <News
+                        key={item.id}
+                        id={item.id}
+                        title={item.title}
+                        date={item.dateView}
                         navigation={this.props.navigation}
-                    />)}
-                </View>
-            </ScrollView>
+                    />}
+                    keyExtractor={(item, index) => index.toString()}
+                    onEndReachedThreshold={0.2}
+                    onEndReached={this.pushnews}
+                    refreshing={refresh}
+                    onRefresh={this.update}
+                />
+            </View>
 
         )
     }

@@ -4,7 +4,7 @@ import { Text, View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as FileSystem from 'expo-file-system';
 import Axios from 'axios';
-import { SQLite } from 'expo-sqlite';
+import * as SQLite from 'expo-sqlite';
 
 import styles from '../styles';
 import { idRouteAdd, myWayAdd } from '../store/action/profileAction';

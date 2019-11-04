@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { connect } from 'react-redux';
 import { Audio } from 'expo-av';
-import { SQLite } from 'expo-sqlite';
+import * as SQLite from 'expo-sqlite';
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
@@ -12,6 +12,7 @@ import * as TaskManager from 'expo-task-manager';
 
 import styles from '../../styles';
 import { stationsGPSADD } from '../../store/action/profileAction';
+import BigBtn from '../../components/button/BigBtn';
 
 const db = SQLite.openDatabase("db.db");
 
@@ -26,7 +27,7 @@ findStation = (locations) => {
         let radius = Stations.stations[i].radius;
         let latStation = Stations.stations[i].latitude;
         let lonStation = Stations.stations[i].longitude;
-        let r = Math.sqrt((lat - latStation) * (lat - latStation) + (lon - lonStation) * (lon - lonStation)); //Теорема пифагора
+        let r = Math.sqrt((lat - latStation) * (lat - latStation) + (lon - lonStation) * (lon - lonStation));
         if (radius > r.toFixed(6)) {
             if (Stations.stations[i].id != prevStationId) {
                 this.read(Stations.id, Stations.stations[i].id);
@@ -43,6 +44,15 @@ findStation = (locations) => {
 }
 //Озвучка
 play = async (x) => {
+    Audio.setAudioModeAsync({
+        staysActiveInBackground: true,
+        shouldDuckAndroid: true,
+        interruptionModeAndroid: {
+            INTERRUPTION_MODE_ANDROID_DO_NOT_MIX: true,
+            INTERRUPTION_MODE_ANDROID_DUCK_OTHERS: true,
+        },
+        playThroughEarpieceAndroid: true
+    })
     const soundObject = new Audio.Sound();
     try {
         await soundObject.loadAsync({ uri: x });
@@ -99,7 +109,7 @@ class MyIdRouteScreen extends React.Component {
                 onPress={() => navigation.navigate('MyRoute')} />
         };
     };
-    tracking = async () => {
+    start = async () => {
         const { myWays } = this.props;
         const { way } = this.state;
         this.setState({ active: true });
@@ -113,6 +123,7 @@ class MyIdRouteScreen extends React.Component {
             {
                 accuracy: Location.Accuracy.Highest,
                 timeInterval: 1000,
+                distanceInterval: 0,
             },
         );
         let x = { active: true, way: way };
@@ -166,13 +177,20 @@ class MyIdRouteScreen extends React.Component {
         return (
             <View style={styles.track}>
                 <Text style={styles.trackStatusText1}>{way ? route.ways[1].name : route.ways[0].name}</Text>
-                <TouchableOpacity style={active ? styles.trackButton2 : styles.trackButton1} onPress={active ? this.stop : this.tracking}>
-                    {active ? <Text style={styles.trackButtonText}>Остановить</Text> : <Text style={styles.trackButtonText}>Начать</Text>}
-                </TouchableOpacity>
-
-                <TouchableOpacity style={way ? styles.trackButton2 : styles.trackButton1} onPress={this.way}>
-                    {way ? <Text style={styles.trackButtonText}>Сменить направление</Text> : <Text style={styles.trackButtonText}>Сменить направление</Text>}
-                </TouchableOpacity>
+                <BigBtn
+                    name1='Остановить'
+                    name2='Начать'
+                    active={active}
+                    stop={this.stop}
+                    start={this.start}
+                />
+                <BigBtn
+                name1='Сменить направление'
+                name2='Сменить направление'
+                active={way}
+                stop={this.way}
+                start={this.way}
+                />
             </View>
         )
     }

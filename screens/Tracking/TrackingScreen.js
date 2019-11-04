@@ -12,6 +12,8 @@ import moment from 'moment';
 import axios from 'axios';
 
 import styles from '../../styles';
+import BigBtn from '../../components/button/BigBtn';
+import StandardBtn from '../../components/button/StandardBtn';
 
 let token = null;
 
@@ -27,7 +29,7 @@ sendLocation = async (locations) => {
         lat: locations[locations.length-1].coords.latitude,
         lon: locations[locations.length-1].coords.longitude,
         time: time,
-        alt: locations[locations.length-1].coords.altitude,
+        alt: Math.round(locations[locations.length-1].coords.altitude),
         dir: 0,
         speed: locations[locations.length-1].coords.speed,
     }).then(response => console.log(response.data))
@@ -57,6 +59,7 @@ class TrackingScreen extends React.Component {
     };
     //Переход в экран логов
     log = () => {
+        console.log('123123')
         this.props.navigation.navigate('TrackLog');
     }
     componentWillMount() {
@@ -82,7 +85,7 @@ class TrackingScreen extends React.Component {
     start = async () => {
         this.setState({ active: !this.state.active })
         let locat = await Location.startLocationUpdatesAsync('Location', {
-            accuracy: Location.Accuracy.High,
+            accuracy: Location.Accuracy.Highest,
             timeInterval: 2000,
             distanceInterval: 0
         });
@@ -102,13 +105,11 @@ class TrackingScreen extends React.Component {
                     <Text style={styles.trackStatusText}>Статус трекера:</Text>
                     {active ? <Text style={styles.trackStatusText1}>Активирован</Text> : <Text style={styles.trackStatusText2}>Не активирован</Text>}
                 </View>
-                <TouchableOpacity style={active ? styles.trackButton2 : styles.trackButton1} onPress={active ? this.stop : this.start}>
-                    {active ? <Text style={styles.trackButtonText}>Остановить</Text> : <Text style={styles.trackButtonText}>Начать отслеживание</Text>}
-                </TouchableOpacity>
 
-                <TouchableOpacity style={styles.trackButtonLog} onPress={this.log}>
-                    <Text style={styles.trackLogText}>Посмотреть логи</Text>
-                </TouchableOpacity>
+                <BigBtn active = {active} stop = {this.stop} start = {this.start} name1='Остановить' name2='Начать отслеживание'/>
+                <View style={styles.indent}/>
+                <StandardBtn name='Посмотреть логи' run={this.log}/>
+
                 <View style={styles.trackTarif}>
                     <Text style={styles.trackTarifText}>Ежедневная абонентская плата за использование трекера составляет {tarif} рублей</Text>
                 </View>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
-import { Text, View, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { View, FlatList } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
@@ -41,20 +40,21 @@ class MyRouteScreen extends React.Component {
     render() {
         const { myRoute, token } = this.props;
         const { modalVisible, errorModalMessage, modalVisible2 } = this.state;
-        console.log(token);
-        
+
         return (
             <View style={styles.routeUrban}>
-                <ScrollView>
-                    {myRoute.map(route => <MyRoute
-                        key={route.id}
-                        id={route.id}
-                        ways={route.ways}
-                        number={route.number}
-                        price={route.sellingPrice}
+                <FlatList
+                    data={myRoute}
+                    renderItem={({ item }) => <MyRoute
+                        key={item.id}
+                        id={item.id}
+                        ways={item.ways}
+                        number={item.number}
+                        price={item.sellingPrice}
                         open={this.openid}
-                    />)}
-                </ScrollView>
+                    />}
+                    keyExtractor={(item, index) => index.toString()}
+                />
 
                 {/* Модальное окно */}
                 <AwesomeAlert

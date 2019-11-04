@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import axios from 'axios';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
+import StandardBtn from '../components/button/StandardBtn';
 import styles from '../styles';
 import { tokenAdd } from '../store/action/logAction';
 
@@ -111,11 +112,7 @@ class LoginScreen extends React.Component {
                             value={password}
                         />
                     </View>
-
-                    <TouchableOpacity style={styles.button} onPress={this.signin}>
-                        <Text style={styles.buttonText}>ВОЙТИ</Text>
-                    </TouchableOpacity>
-
+                    <StandardBtn name = 'ВОЙТИ' run = {this.signin}/>
                 </View>
 
                 {/* Регистрация и восстановление пароля */}

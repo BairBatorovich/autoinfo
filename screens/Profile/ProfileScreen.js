@@ -9,6 +9,9 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 
 import styles from '../../styles';
 import { profileAdd, routeAdd } from '../../store/action/profileAction';
+import StandardBtn from '../../components/button/StandardBtn';
+import StandardBtnGray from '../../components/button/StandardBtnGray';
+import HalfBtn from '../../components/button/HalfBtn';
 
 class ProfileScreen extends React.Component {
     constructor(props) {
@@ -129,7 +132,7 @@ class ProfileScreen extends React.Component {
     render() {
         const { fname, lname, sname, numbercar, balance, limit,
             mainRoute, fuelCard, cardNumber, modalVisible, message } = this.state;
-
+        let fio = `${sname} ${fname} ${lname}`
         return (
             <ScrollView>
                 <View style={styles.profileView}>
@@ -137,32 +140,12 @@ class ProfileScreen extends React.Component {
                     <TextInput
                         style={styles.loginInputText}
                         editable={false}
-                        value={sname}
+                        value={fio}
                         multiline={false}
                         maxLength={30}
                         keyboardType={"number-pad"}
                         placeholderTextColor="#59595A"
                         onChangeText={value => this.setState({ sname: value })}
-                    />
-                    <TextInput
-                        style={styles.loginInputText}
-                        editable={false}
-                        value={fname}
-                        multiline={false}
-                        maxLength={30}
-                        keyboardType={"number-pad"}
-                        placeholderTextColor="#59595A"
-                        onChangeText={value => this.setState({ fname: value })}
-                    />
-                    <TextInput
-                        style={styles.loginInputText}
-                        editable={false}
-                        value={lname}
-                        multiline={false}
-                        maxLength={30}
-                        keyboardType={"number-pad"}
-                        placeholderTextColor="#59595A"
-                        onChangeText={value => this.setState({ lname: value })}
                     />
                     <TextInput
                         style={styles.loginInputText}
@@ -195,8 +178,8 @@ class ProfileScreen extends React.Component {
                         </TouchableOpacity>
                     }
 
-                    <Text style={styles.profileText}>{balance + " руб."}</Text>
-                    <Text style={styles.profileText}>{limit} лимит</Text>
+                    <Text style={styles.profileText}>Баланс: {balance + " руб."}</Text>
+                    <Text style={styles.profileText}>Ограничение: {limit} лимит</Text>
 
                     {/* Добавить изменить Банковскую карту */}
                     {cardNumber == '' ? <TouchableOpacity onPress={this.editCard} style={styles.profileRoute}>
@@ -214,32 +197,18 @@ class ProfileScreen extends React.Component {
                                 size={32}
                             />
                         </TouchableOpacity>}
-                    { balance < 300 ? <TouchableOpacity style={styles.buttonOff}>
-                        <Text style={styles.buttonText}>Вывести деньги</Text>
-                    </TouchableOpacity> : <TouchableOpacity style={styles.button} onPress={this.withdraw}>
-                            <Text style={styles.buttonText}>Вывести деньги</Text>
-                        </TouchableOpacity>}
-               { balance < 300 ? <TouchableOpacity style={styles.buttonOff}>
-                        <Text style={styles.buttonText}>Вывести деньги на топливную карту</Text>
-                    </TouchableOpacity> : <TouchableOpacity style={styles.button} onPress={this.withdrawFC}>
-                        <Text style={styles.buttonText}>Вывести деньги на топливную карту</Text>
-                    </TouchableOpacity>}
+                        
+                    {balance < 300 ? <StandardBtnGray name='Вывести деньги' /> : <StandardBtn name='Вывести деньги' run={this.withdraw} />}
+                    {balance < 300 ? <StandardBtnGray name='Вывести деньги на топливную карту' /> : <StandardBtn name='Вывести деньги на топливную карту' run={this.withdrawFC} />}
 
-                    <TouchableOpacity style={styles.button} onPress={this.transaction}>
-                        <Text style={styles.buttonText}>Список транзакций</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={this.myroute}>
-                        <Text style={styles.buttonText}>Мои маршруты</Text>
-                    </TouchableOpacity>
+                    <StandardBtn name='Список транзакций' run={this.transaction} />
+                    <StandardBtn name='Мои маршруты' run={this.myroute}/>
 
                     <View style={styles.profileButBlock}>
-                        <TouchableOpacity style={styles.profileButton} onPress={this.transfer}>
-                            <Text style={styles.buttonText}>Как пополнить баланс</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.profileButton} onPress={this.update}>
-                            <Text style={styles.buttonText}>Обновить профиль</Text>
-                        </TouchableOpacity>
+                        <HalfBtn name='Как пополнить баланс' run={this.transfer}/>
+                        <HalfBtn name='Обновить профиль' run={this.update}/>
                     </View>
+                    
                     {/* Модальное окно */}
                     <AwesomeAlert
                         show={modalVisible}

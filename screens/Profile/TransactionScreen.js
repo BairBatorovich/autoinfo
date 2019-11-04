@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { Text, View, FlatList } from 'react-native';
+import { View, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import moment from "moment";
 
 import styles from '../../styles';
 import { transactionAdd } from '../../store/action/profileAction';
+import StandardBtn from '../../components/button/StandardBtn';
+import Transaction from '../../components/Transaction';
 
 
 class TransactionScreen extends React.Component {
@@ -30,35 +31,52 @@ class TransactionScreen extends React.Component {
                 onPress={() => navigation.navigate('Profile')} />
         };
     };
-    componentDidMount = async () => {
-        if (this.props.transaction == 0) {
+    download = async () => {
+        let transaction = [];
+        let lastTransaction = '';
+        for (i = 1; i < 100; i++) {
             try {
-                const response = await axios.get(`/v1/transaction/index?access-token=${this.props.token}&page=${this.state.page}`);
-                if (response.data.length != 0) {
-                    this.props.transactionAdd(response.data);
+                const response = await axios.get(`/v1/transaction/index?access-token=${this.props.token}&page=${i}`);
+                if (response.data.length > 0) {
+                    if (lastTransaction == response.data[response.data.length - 1].id) {
+                        lastTransaction = response.data[response.data.length - 1].id;
+                        break;
+                    } else {
+                        lastTransaction = response.data[response.data.length - 1].id;
+                        transaction = [...transaction, ...response.data];
+                        this.props.transactionAdd(transaction);
+                    }
                 } else {
                     this.setState({ message: 'Список транзакций пуст' });
+                    break;
                 }
             } catch (error) {
                 console.log(error);
             }
         }
     }
+    componentDidMount = async () => {
+        if (this.props.transaction == 0) {
+            this.download();
+        }
+    }
 
     render() {
         const { transaction } = this.props;
-        
+
         return (
-            <FlatList
-                data={ transaction }
-                renderItem={ ({ item }) => <View style={styles.transaction}>
-                    { item.description == 'Пополнение' ? <Text style={styles.transactionText}>{item.description} 
-                    : {item.sum} руб. { moment(item.created_at*1000).format('L') }</Text> : <Text style={styles.transactionTextW}>
-                    {item.description}: {item.sum} руб. { moment(item.created_at*1000).format('L') }
-                    </Text>}
-                </View> }
-                keyExtractor={(item, index) => index.toString()}
-            />
+            <View style={styles.transactionScreen}>
+                <FlatList
+                    data={transaction}
+                    renderItem={({ item }) => <Transaction
+                        sum={item.sum}
+                        description={item.description}
+                        created_at={item.created_at}
+                        />}
+                    keyExtractor={(item, index) => index.toString()}
+                />
+                <StandardBtn name='Обновить' run={this.download} />
+            </View>
         )
     }
 };

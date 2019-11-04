@@ -1,19 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Text, View, TouchableOpacity, Linking, AsyncStorage } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import styles from '../styles';
 import { tokenAdd } from '../store/action/logAction';
+import DrawerBtn from '../components/button/DrawerBtn';
+import DrawerBtnGray from '../components/button/DrawerBtnGray';
+import Logo from '../components/Logo';
+import { PHONE } from '../constants'
 
 
 class AppDrawer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      number: 565632
-    }
-  }
+
   news = () => {
     this.props.navigation.navigate('News');
   };
@@ -31,7 +29,7 @@ class AppDrawer extends React.Component {
   };
   //Звонок в техподдержку
   callphone = () => {
-    Linking.openURL(`tel:${this.state.number}`)
+    Linking.openURL(`tel:${PHONE}`)
   };
   //Выход
   exit = async () => {
@@ -47,34 +45,15 @@ class AppDrawer extends React.Component {
 
   render() {
     return (
-      <View style={styles.drawerView}>
-        <View style={styles.drawerLogo}>
-          <Icon name='bus-alt' size={60} color='#0080FF' style={styles.drawerIcon} />
-          <Text style={styles.drawerLogoText}>АвтоИнформатор 3</Text>
-        </View>
-        <TouchableOpacity onPress={this.profile} style={styles.drawerButton}>
-          <Text style={styles.drawerButtonText}>Профиль</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.qrcode} style={styles.drawerButton}>
-          <Text style={styles.drawerButtonText}>QR код</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.news} style={styles.drawerButton}>
-          <Text style={styles.drawerButtonText}>Новости</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.track} style={styles.drawerButton}>
-          <Text style={styles.drawerButtonText}>Трекер</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.route} style={styles.drawerButton}>
-          <Text style={styles.drawerButtonText}>Маршруты</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={this.exit} style={styles.drawerExit}>
-          <Text style={styles.drawerButtonText}>ВЫЙТИ</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={this.callphone} style={styles.drawerExit}>
-          <Text style={styles.drawerButtonText}>Техподдержка</Text>
-        </TouchableOpacity>
+      <View style={styles.drawer}>
+        <Logo/>
+        <DrawerBtn name='Профиль' run={ this.profile }/>
+        <DrawerBtn name='QR код' run={ this.qrcode }/>
+        <DrawerBtn name='Новости' run={ this.news }/>
+        <DrawerBtn name='Трекер' run={ this.track }/>
+        <DrawerBtn name='Маршруты' run={ this.route }/>
+        <DrawerBtnGray name='ВЫЙТИ' run={ this.exit }/>
+        <DrawerBtnGray name='Техподдержка' run={ this.callphone }/>
       </View>
     );
   }
